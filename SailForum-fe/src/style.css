@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.el-drawer__body {
+  border-top: 1px solid #f3f3f3;
+}
+
+.el-drawer__title {
+  font-weight: bold;
+  font-size: 1.2rem !important;
+}
