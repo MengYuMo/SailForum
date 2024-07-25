@@ -27,9 +27,20 @@ module.exports = {
 				version: "1.0.0",
 				description: "API文档描述",
 			},
-			basePath: "/v1",
+			basePath:
+				process.env.NODE_ENV === "prod"
+					? "/sailforum-prod/V1/api"
+					: "/sailforum-test/V1/api",
 			produces: ["application/json"],
 			schemes: ["http", "https"],
+			securityDefinitions: {
+				JWT: {
+					type: "apiKey",
+					in: "header",
+					name: "Authorization",
+					description: "",
+				},
+			},
 		},
 		basedir: __dirname,
 		files: ["../src/controllers/*/*.js"],
