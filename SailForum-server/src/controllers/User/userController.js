@@ -1,5 +1,11 @@
 "use strict";
 
+/**
+ * @typedef UserInfoModel
+ * @property {string} userName.required - 用户名
+ * @property {string} password.required - 密码
+ */
+
 const { cloneDeep } = require("lodash");
 const { createUUID, Response, encrypt, formatTime } = require("../../utils");
 const User = require("../../models/user/userModel.js");
@@ -17,11 +23,12 @@ async function checkedUser(user_name) {
 const userController = {
 	/**
 	 * 用户注册信息
-	 * @route POST /sailforum-test/V1/api/users/register
+	 * @route POST /users/register
 	 * @group User - Operations about user
 	 * @param {string} user_name.query.required - 用户名
 	 * @param {string} password.query.required - 密码
 	 * @returns {object} 200 - 注册成功的用户信息
+	 * @returns {object} 500 - 系统错误
 	 */
 	register: async (req, res) => {
 		try {
@@ -38,11 +45,11 @@ const userController = {
 	},
 	/**
 	 * 用户登录
-	 * @route POST /sailforum-test/V1/api/users/login
+	 * @route POST /users/login
 	 * @group User - Operations about user
-	 * @param {string} user_name.body.required - 用户名
-	 * @param {string} password.body.required - 密码
+	 * @param {UserInfoModel.model} userInfoModel.body.required - 用户名
 	 * @returns {object} 200 - 登陆成功的用户信息
+	 * @returns {object} 500 - 系统错误
 	 */
 	login: async (req, res) => {
 		try {
@@ -53,6 +60,7 @@ const userController = {
 				return res.json(Response.failHandler({}, "该用户不存在！"));
 			if (encrypt(password) !== userDataList[0].password)
 				return res.json(Response.failHandler(null, "密码不正确！"));
+			console.log(userDataList[0].id);
 			const tokenData = {
 				user_id: userDataList[0].id,
 				user_name: userDataList[0].username,
@@ -74,9 +82,11 @@ const userController = {
 	},
 	/**
 	 * 用户退出登陆
-	 * @route POST /sailforum-test/V1/api/users/logout
+	 * @route POST /users/logout
 	 * @group User - Operations about user
 	 * @returns {object} 200 - 用户成功退出登陆
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	logout: async (req, res) => {
 		try {
@@ -92,9 +102,11 @@ const userController = {
 	},
 	/**
 	 * 获取用户列表方法
-	 * @route GET /sailforum-test/V1/api/users/list
+	 * @route GET /users/list
 	 * @group User - Operations about user
 	 * @returns {Array} 200 - 获取用户列表成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	list: async (req, res) => {
 		try {
@@ -107,14 +119,16 @@ const userController = {
 	},
 	/**
 	 * 获取当前登陆用户信息方法
-	 * @route GET /sailforum-test/V1/api/users/:id
+	 * @route GET /users/get
 	 * @group User - Operations about user
 	 * @returns {object} 200 - 获取当前登陆用户信息成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	getUserInfo: async (req, res) => {
 		try {
-			const { authorization } = req.headers;
-			const decryRes = decryToken(authorization);
+			const { Authorization } = req.headers;
+			const decryRes = decryToken(Authorization);
 			const userInfoList = await User.select(
 				{
 					user_id: decryRes["user_id"],
@@ -132,9 +146,11 @@ const userController = {
 	/**
 	 * 根据 user_id 获取用户信息方法
 	 * @param {string} user_id.query.required - 用户ID
-	 * @route POST /sailforum-test/V1/api/users/:id
+	 * @route POST /users/:id
 	 * @group User - Operations about user
 	 * @returns {object} 200 - 根据 user_id 获取用户信息成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	getUserInfoById: async (req, res) => {
 		try {
@@ -151,11 +167,13 @@ const userController = {
 	},
 	/**
 	 * 添加用户方法
-	 * @route POST /sailforum-test/V1/api/users/add
+	 * @route POST /users/add
 	 * @group User - Operations about user
 	 * @param {string} user_name.query.required - 用户名
 	 * @param {string} password.query.required - 密码
 	 * @returns {object} 200 - 添加用户成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	addUser: async (req, res) => {
 		try {
@@ -178,10 +196,12 @@ const userController = {
 	},
 	/**
 	 * 根据 user_id 修改用户信息方法
-	 * @route PUT /sailforum-test/V1/api/users/:userId
+	 * @route PUT /users/update/:userId
 	 * @group User - Operations about user
-	 * @param {string} user_id.qurey.required - 用户ID
+	 * @param {string} userId.path.required - 用户ID
 	 * @returns {object} 200 - 根据 user_id 修改用户信息成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	updateById: async (req, res) => {
 		try {
@@ -195,10 +215,12 @@ const userController = {
 	},
 	/**
 	 * 根据 user_id 删除用户方法
-	 * @route DELETE /sailforum-test/V1/api/users/:userId
+	 * @route DELETE /users/del/:userId
 	 * @group User - Operations about user
-	 * @param {string} user_id.qurey.required - 用户ID
+	 * @param {string} userId.path.required - 用户ID
 	 * @returns {object} 200 - 根据 user_id 删除用户成功
+	 * @returns {object} 500 - 系统错误
+	 * @security JWT
 	 */
 	deleteById: async (req, res) => {
 		try {
