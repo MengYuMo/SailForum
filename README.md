@@ -1,6 +1,6 @@
 <div align=center>
 
-##  SailForum :rocket:
+## SailForum :rocket:
 
 </div>
 
@@ -27,30 +27,30 @@ We are also very grateful to all our supporters! :pray:
 
 1. **Clone code**
 
-    ```bash
-    git clone https://github.com/MengYuMo/SailForum.git
-    # or
-    git clone git@github.com:MengYuMo/SailForum.git
+   ```bash
+   git clone https://github.com/MengYuMo/SailForum.git
+   # or
+   git clone git@github.com:MengYuMo/SailForum.git
 
-    # It is recommended to use SSH to clone code, as HTTPS cloning may result in many inexplicable bugs in China.
-    ```
+   # It is recommended to use SSH to clone code, as HTTPS cloning may result in many inexplicable bugs in China.
+   ```
 
 2. **Get start**
 
-    Firstly, it is necessary to install the dependent packages through npm.
+   Firstly, it is necessary to install the dependent packages through npm.
 
-    You need to enter SailForum service, SailForum fe, and SailForum client separately to execute the following commands:
+   You need to enter SailForum service, SailForum fe, and SailForum client separately to execute the following commands:
 
-    ```shell
-    pnpm install
-    ```
+   ```shell
+   pnpm install
+   ```
 
-    After waiting for the dependency installation to complete, you can start the project.
+   After waiting for the dependency installation to complete, you can start the project.
 
-    * `server` : `npm run start`
-    * `client` and `fe` : `npm run dev`
+   - `server` : `npm run start`
+   - `client` and `fe` : `npm run dev`
 
-    At this point, the project has been launched and completed. :tada::tada::tada:
+   At this point, the project has been launched and completed. :tada::tada::tada:
 
 ### License :memo:
 

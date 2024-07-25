@@ -8,11 +8,7 @@ const { setValue, removeValue } = require("../../../conf/redis/redis");
 const { globalConfig } = require("../../../conf");
 const UserInfo = require("../../entity/user/userInfoEntity");
 
-/**
- * 校验用户是否存在
- * @param user_name
- * @returns {Promise<boolean>}
- */
+// 检验用户是否存在
 async function checkedUser(user_name) {
 	const userData = await User.select({ user_name }, UserInfo.getEntity());
 	return Array.isArray(userData) ? !userData.length : false;
@@ -20,10 +16,12 @@ async function checkedUser(user_name) {
 
 const userController = {
 	/**
-	 * 用户注册处理方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * 用户注册信息
+	 * @route POST /sailforum-test/V1/api/users/register
+	 * @group User - Operations about user
+	 * @param {string} user_name.query.required - 用户名
+	 * @param {string} password.query.required - 密码
+	 * @returns {object} 200 - 注册成功的用户信息
 	 */
 	register: async (req, res) => {
 		try {
@@ -39,10 +37,12 @@ const userController = {
 		}
 	},
 	/**
-	 * 用户登陆处理方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * 用户登录
+	 * @route POST /sailforum-test/V1/api/users/login
+	 * @group User - Operations about user
+	 * @param {string} user_name.body.required - 用户名
+	 * @param {string} password.body.required - 密码
+	 * @returns {object} 200 - 登陆成功的用户信息
 	 */
 	login: async (req, res) => {
 		try {
@@ -73,10 +73,10 @@ const userController = {
 		}
 	},
 	/**
-	 * 用户退出登录处理方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * 用户退出登陆
+	 * @route POST /sailforum-test/V1/api/users/logout
+	 * @group User - Operations about user
+	 * @returns {object} 200 - 用户成功退出登陆
 	 */
 	logout: async (req, res) => {
 		try {
@@ -92,9 +92,9 @@ const userController = {
 	},
 	/**
 	 * 获取用户列表方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<void>}
+	 * @route GET /sailforum-test/V1/api/users/list
+	 * @group User - Operations about user
+	 * @returns {Array} 200 - 获取用户列表成功
 	 */
 	list: async (req, res) => {
 		try {
@@ -107,9 +107,9 @@ const userController = {
 	},
 	/**
 	 * 获取当前登陆用户信息方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<void>}
+	 * @route GET /sailforum-test/V1/api/users/:id
+	 * @group User - Operations about user
+	 * @returns {object} 200 - 获取当前登陆用户信息成功
 	 */
 	getUserInfo: async (req, res) => {
 		try {
@@ -131,9 +131,10 @@ const userController = {
 	},
 	/**
 	 * 根据 user_id 获取用户信息方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * @param {string} user_id.query.required - 用户ID
+	 * @route POST /sailforum-test/V1/api/users/:id
+	 * @group User - Operations about user
+	 * @returns {object} 200 - 根据 user_id 获取用户信息成功
 	 */
 	getUserInfoById: async (req, res) => {
 		try {
@@ -150,9 +151,11 @@ const userController = {
 	},
 	/**
 	 * 添加用户方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<void>}
+	 * @route POST /sailforum-test/V1/api/users/add
+	 * @group User - Operations about user
+	 * @param {string} user_name.query.required - 用户名
+	 * @param {string} password.query.required - 密码
+	 * @returns {object} 200 - 添加用户成功
 	 */
 	addUser: async (req, res) => {
 		try {
@@ -175,9 +178,10 @@ const userController = {
 	},
 	/**
 	 * 根据 user_id 修改用户信息方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * @route PUT /sailforum-test/V1/api/users/:userId
+	 * @group User - Operations about user
+	 * @param {string} user_id.qurey.required - 用户ID
+	 * @returns {object} 200 - 根据 user_id 修改用户信息成功
 	 */
 	updateById: async (req, res) => {
 		try {
@@ -191,9 +195,10 @@ const userController = {
 	},
 	/**
 	 * 根据 user_id 删除用户方法
-	 * @param req
-	 * @param res
-	 * @returns {Promise<*>}
+	 * @route DELETE /sailforum-test/V1/api/users/:userId
+	 * @group User - Operations about user
+	 * @param {string} user_id.qurey.required - 用户ID
+	 * @returns {object} 200 - 根据 user_id 删除用户成功
 	 */
 	deleteById: async (req, res) => {
 		try {
