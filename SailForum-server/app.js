@@ -15,6 +15,10 @@ const secret = globalConfig.token.SECRET_KEY;
 
 const app = express();
 
+const expressSwagger = require("express-swagger-generator")(app);
+
+expressSwagger(globalConfig.swaggerConfig);
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
@@ -32,6 +36,7 @@ app.use(
 		path: [
 			`${globalConfig.baseURL}/users/login`,
 			`${globalConfig.baseURL}/users/register`,
+			"/api-docs",
 		],
 	})
 );

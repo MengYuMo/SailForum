@@ -20,4 +20,18 @@ module.exports = {
 		process.env.NODE_ENV === "prod"
 			? "/sailforum-prod/V1/api"
 			: "/sailforum-test/V1/api",
+	swaggerConfig: {
+		swaggerDefinition: {
+			info: {
+				title: "API文档",
+				version: "1.0.0",
+				description: "API文档描述",
+			},
+			basePath: "/v1",
+			produces: ["application/json"],
+			schemes: ["http", "https"],
+		},
+		basedir: __dirname,
+		files: ["../src/controllers/*/*.js"],
+	},
 };
